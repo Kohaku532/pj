@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Receipt</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+<div class="receipt">
+
+<h1>My Restaurant</h1>
+
+<h2>Order Receipt</h2>
+
+
+<table border="1" width="100%">
+
+<tr>
+<th>Menu</th>
+<th>Price</th>
+<th>Qty</th>
+<th>Total</th>
+</tr>
+
+
+<tbody id="order">
+
+</tbody>
+
+
+</table>
+
+
+<h2 id="total"></h2>
+
+
+<a href="payment.html">
+Pay Now
+</a>
+
+
+</div>
+
+
+
+<script>
+
+
+let cart = JSON.parse(localStorage.getItem("cart"));
+
+
+let output="";
+let grandTotal=0;
+
+
+
+cart.forEach(food=>{
+
+
+let subtotal = food.price * food.quantity;
+
+
+output +=
+
+
+<tr>
+
+<td>${food.name}</td>
+
+<td>${food.price} Ks</td>
+
+<td>${food.quantity}</td>
+
+<td>${subtotal} Ks</td>
+
+
+</tr>
+;
+
+
+grandTotal += subtotal;
+
+
+});
+
+
+
+document.getElementById("order").innerHTML=output;
+
+
+
+document.getElementById("total").innerHTML=
+
+"Total Amount : "+grandTotal+" Ks";
+
+
+
+</script>
+
+
+</body>
+
+</html>
