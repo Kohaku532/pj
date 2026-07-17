@@ -1,106 +1,77 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-<title>Receipt</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Bill</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
+    <h1>Restaurant Receipt</h1>
 
-<div class="receipt">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Menu</th>
+                <th>Qty</th>
+                <th>Price (Ks)</th>
+                <th>Total (Ks)</th>
+            </tr>
+        </thead>
+        <tbody id="billBody">
+        </tbody>
+    </table>
 
-<h1>My Restaurant</h1>
+    <h2 id="grandTotal">Grand Total : 0 Ks</h2>
 
-<h2>Order Receipt</h2>
+    <div style="text-align:center;">
+        <button onclick="clearCart()" class="clear-btn">Clear Cart</button>
 
-
-<table border="1" width="100%">
-
-<tr>
-<th>Menu</th>
-<th>Price</th>
-<th>Qty</th>
-<th>Total</th>
-</tr>
-
-
-<tbody id="order">
-
-</tbody>
-
-
-</table>
-
-
-<h2 id="total"></h2>
-
-
-<a href="payment.html">
-Pay Now
-</a>
-
-
-</div>
-
-
+        <a href="index.html">
+            <button>Back to Menu</button>
+        </a>
+    </div>
 
 <script>
 
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-let cart = JSON.parse(localStorage.getItem("cart"));
+let billBody = document.getElementById("billBody");
+let grandTotal = 0;
 
+cart.forEach((item,index)=>{
 
-let output="";
-let grandTotal=0;
+    let total = item.price * item.qty;
+    grandTotal += total;
 
-
-
-cart.forEach(food=>{
-
-
-let subtotal = food.price * food.quantity;
-
-
-output +=
-
-
-<tr>
-
-<td>${food.name}</td>
-
-<td>${food.price} Ks</td>
-
-<td>${food.quantity}</td>
-
-<td>${subtotal} Ks</td>
-
-
-</tr>
-;
-
-
-grandTotal += subtotal;
-
-
+    billBody.innerHTML += 
+        <tr>
+            <td>${index+1}</td>
+            <td>${item.name}</td>
+            <td>${item.qty}</td>
+            <td>${item.price}</td>
+            <td>${total}</td>
+        </tr>
+    ;
 });
 
+document.getElementById("grandTotal").innerHTML =
+"Grand Total : " + grandTotal + " Ks";
 
+function clearCart(){
 
-document.getElementById("order").innerHTML=output;
+    if(confirm("Clear all items?")){
 
+        localStorage.removeItem("cart");
 
+        location.reload();
+    }
 
-document.getElementById("total").innerHTML=
-
-"Total Amount : "+grandTotal+" Ks";
-
-
+}
 
 </script>
 
-
 </body>
-
 </html>
