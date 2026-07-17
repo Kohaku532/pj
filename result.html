@@ -1,0 +1,12 @@
+<h2>ရလဒ်စာမျက်နှာ</h2>
+<p id="output"></p>
+
+<script>
+    // URL ထဲက ပါလာတဲ့ Parameters တွေကို ဖတ်တာပါ
+    const urlParams = new URLSearchParams(window.location.search);
+    const fruit = urlParams.get('selectedFruit');
+
+    if(fruit) {
+        document.getElementById("output").innerText = "ရွေးချယ်ခဲ့သည့်အရာ: " + fruit;
+    }
+</script>
