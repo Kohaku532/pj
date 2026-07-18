@@ -21,7 +21,6 @@
             </tr>
         </thead>
         <tbody id="billBody">
-            <!-- ဤနေရာတွင် ရွေးချယ်ထားသော စာရင်းများ ပေါ်လာမည် -->
         </tbody>
     </table>
 
@@ -34,26 +33,19 @@
             <button style="padding: 10px 20px; cursor: pointer;">Back to Menu</button>
         </a>
     </div>
-
-    <!-- JavaScript ကုဒ်များကို စနစ်တကျ တစ်နေရာတည်းတွင် စုစည်းထားသည် -->
     <script>
-        // LocalStorage မှ Cart Data ကို ဆွဲထုတ်ယူခြင်း (မရှိပါက Empty Array ထားမည်)
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-        // စာရင်းများကို ဇယားထဲတွင် ဆွဲပြပေးမည့် လုပ်ဆောင်ချက် (Function)
         function showBill() {
             let billBody = document.getElementById("billBody");
             if (!billBody) return;
 
-            billBody.innerHTML = ""; // အရင်ရှိပြီးသား စာရင်းအဟောင်းများကို ရှင်းထုတ်ခြင်း
+            billBody.innerHTML = ""; 
             let grandTotal = 0;
 
             cart.forEach((item, index) => {
                 let total = item.price * item.qty;
                 grandTotal += total;
-
-                // Backticks (``) ကို အသုံးပြု၍ Template Literals ဖြင့် HTML ဆောက်ခြင်း
-                billBody.innerHTML += 
+                billBody.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${item.name}</td>
@@ -61,14 +53,11 @@
                         <td>${item.price} Ks</td>
                         <td>${total} Ks</td>
                     </tr>
-                ;
+                `;
             });
-
-            // စုစုပေါင်း ကျသင့်ငွေကို ပြသခြင်း
             document.getElementById("grandTotal").innerHTML = "Grand Total : " + grandTotal + " Ks";
         }
 
-        // Cart တစ်ခုလုံးကို ရှင်းထုတ်မည့် လုပ်ဆောင်ချက်
         function clearCart() {
             if (confirm("Are you sure you want to clear the cart?")) {
                 localStorage.removeItem("cart"); // LocalStorage မှ ဖျက်ခြင်း
