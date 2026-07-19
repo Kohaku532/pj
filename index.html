@@ -9,7 +9,17 @@
 <body>
 
     <h1 align="center">🍴 Restaurant Menu</h1>
-
+<div id="menu-container">
+  <!-- မီနူးစာရင်းတွေကို ပြပေးမယ့် နေရာ -->
+  <h2>စားပွဲနံပါတ်: <span id="table-no">...</span></h2>
+  
+  <div class="menu-item">
+    <p>ကြက်သားကော်ပြန့်ကြော် - ၂,၀၀၀ ကျပ်</p>
+    <button onclick="addToCart('m101', 'ကြက်သားကော်ပြန့်ကြော်', 2000)">+ မှာမယ်</button>
+  </div>
+  
+  <button id="submit-btn" onclick="placeOrder()">အော်ဒါတင်မယ်</button>
+</div>
     <div class="menu">
 
         <div class="item">
