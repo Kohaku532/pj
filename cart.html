@@ -52,8 +52,8 @@
                 let total = item.price * item.qty;
                 grandTotal += total;
 
-                // Backticks (``) ကို အသုံးပြု၍ Template Literals ဖြင့် HTML ဆောက်ခြင်း
-                billBody.innerHTML += 
+                // FIX: Backticks (``) ကို စနစ်တကျ ထည့်သွင်းပေးလိုက်ပါပြီ
+                billBody.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${item.name}</td>
@@ -61,7 +61,7 @@
                         <td>${item.price} Ks</td>
                         <td>${total} Ks</td>
                     </tr>
-                ;
+                `;
             });
 
             // စုစုပေါင်း ကျသင့်ငွေကို ပြသခြင်း
@@ -79,6 +79,6 @@
         // Page စတင်ပွင့်လာသည်နှင့် showBill Function ကို ချက်ချင်း run စေခြင်း
         showBill();
     </script>
-<script src="cart.js"></script>
+
 </body>
 </html>
