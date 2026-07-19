@@ -1,68 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Restaurant Menu</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h1>🍴 Restaurant Menu</h1>
+    <h1 align="center">🍴 Restaurant Menu</h1>
 
-<div class="customer">
-    <label>Customer Phone Number</label><br>
-    <input type="text" id="phone" placeholder="09xxxxxxxxx">
-</div>
+    <div class="menu">
 
-<div class="menu">
+        <div class="item">
+            <h3>Fried Rice</h3>
+            <p>Price : 5000 Ks</p>
+            <button onclick="addToCart('Fried Rice',5000)">Add</button>
+        </div>
 
-<div class="item">
-    <h3>Fried Rice</h3>
-    <p>5000 Ks</p>
-    <button onclick="addToCart('Fried Rice',5000)">Add</button>
-</div>
+        <div class="item">
+            <h3>Chicken Burger</h3>
+            <p>Price : 4500 Ks</p>
+            <button onclick="addToCart('Chicken Burger',4500)">Add</button>
+        </div>
 
-<div class="item">
-    <h3>Chicken Burger</h3>
-    <p>4500 Ks</p>
-    <button onclick="addToCart('Chicken Burger',4500)">Add</button>
-</div>
+        <div class="item">
+            <h3>Pizza</h3>
+            <p>Price : 8000 Ks</p>
+            <button onclick="addToCart('Pizza',8000)">Add</button>
+        </div>
 
-<div class="item">
-    <h3>Pizza</h3>
-    <p>8000 Ks</p>
-    <button onclick="addToCart('Pizza',8000)">Add</button>
-</div>
+        <div class="item">
+            <h3>Noodles</h3>
+            <p>Price : 4000 Ks</p>
+            <button onclick="addToCart('Noodles',4000)">Add</button>
+        </div>
 
-<div class="item">
-    <h3>Noodles</h3>
-    <p>4000 Ks</p>
-    <button onclick="addToCart('Noodles',4000)">Add</button>
-</div>
+        <div class="item">
+            <h3>Coca Cola</h3>
+            <p>Price : 1500 Ks</p>
+            <button onclick="addToCart('Coca Cola',1500)">Add</button>
+        </div>
 
-<div class="item">
-    <h3>Coca Cola</h3>
-    <p>1500 Ks</p>
-    <button onclick="addToCart('Coca Cola',1500)">Add</button>
-</div>
+        <div class="item">
+            <h3>Orange Juice</h3>
+            <p>Price : 2500 Ks</p>
+            <button onclick="addToCart('Orange Juice',2500)">Add</button>
+        </div>
 
-<div class="item">
-    <h3>Orange Juice</h3>
-    <p>2500 Ks</p>
-    <button onclick="addToCart('Orange Juice',2500)">Add</button>
-</div>
+    </div>
 
-</div>
+    <br><br>
 
-<br>
+    <div align="center">
+        <a href="cart.html">
+            <button>🛒 View Bill</button>
+        </a>
+    </div>
 
-<div align="center">
-    <button onclick="placeOrder()">Place Order</button>
-</div>
+<script>
 
-<script src="script.js"></script>
+function addToCart(name, price){
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    let found = cart.find(item => item.name === name);
+
+    if(found){
+        found.qty++;
+    }else{
+        cart.push({
+            name: name,
+            price: price,
+            qty: 1
+        });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    alert(name + " Added to Cart");
+}
+
+</script>
 
 </body>
 </html>
