@@ -10,7 +10,7 @@
 
     <h1>Restaurant Receipt</h1>
 
-    <table border="1">
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; max-width: 600px; margin-bottom: 20px;">
         <thead>
             <tr>
                 <th>No.</th>
@@ -21,63 +21,64 @@
             </tr>
         </thead>
         <tbody id="billBody">
+            <!-- ဤနေရာတွင် ရွေးချယ်ထားသော စာရင်းများ ပေါ်လာမည် -->
         </tbody>
     </table>
 
     <h2 id="grandTotal">Grand Total : 0 Ks</h2>
 
-    <div style="text-align:center;">
-        <button onclick="clearCart()" class="clear-btn">Clear Cart</button>
+    <div style="text-align:center; margin-top: 20px;">
+        <button onclick="clearCart()" class="clear-btn" style="padding: 10px 20px; background-color: #ff4d4d; color: white; border: none; cursor: pointer; margin-right: 10px;">Clear Cart</button>
 
         <a href="index.html">
-            <button>Back to Menu</button>
+            <button style="padding: 10px 20px; cursor: pointer;">Back to Menu</button>
         </a>
     </div>
 
-<script>
+    <!-- JavaScript ကုဒ်များကို စနစ်တကျ တစ်နေရာတည်းတွင် စုစည်းထားသည် -->
+    <script>
+        // LocalStorage မှ Cart Data ကို ဆွဲထုတ်ယူခြင်း (မရှိပါက Empty Array ထားမည်)
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        // စာရင်းများကို ဇယားထဲတွင် ဆွဲပြပေးမည့် လုပ်ဆောင်ချက် (Function)
+        function showBill() {
+            let billBody = document.getElementById("billBody");
+            if (!billBody) return;
 
-let billBody = document.getElementById("billBody");
-let grandTotal = 0;
+            billBody.innerHTML = ""; // အရင်ရှိပြီးသား စာရင်းအဟောင်းများကို ရှင်းထုတ်ခြင်း
+            let grandTotal = 0;
 
-cart.forEach((item,index)=>{
+            cart.forEach((item, index) => {
+                let total = item.price * item.qty;
+                grandTotal += total;
 
-    let total = item.price * item.qty;
-    grandTotal += total;
+                // Backticks (``) ကို အသုံးပြု၍ Template Literals ဖြင့် HTML ဆောက်ခြင်း
+                billBody.innerHTML += 
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.qty}</td>
+                        <td>${item.price} Ks</td>
+                        <td>${total} Ks</td>
+                    </tr>
+                ;
+            });
 
-    billBody.innerHTML += 
-        <tr>
-            <td>${index+1}</td>
-            <td>${item.name}</td>
-            <td>${item.qty}</td>
-            <td>${item.price}</td>
-            <td>${total}</td>
-        </tr>
-    ;
-});
+            // စုစုပေါင်း ကျသင့်ငွေကို ပြသခြင်း
+            document.getElementById("grandTotal").innerHTML = "Grand Total : " + grandTotal + " Ks";
+        }
 
-document.getElementById("grandTotal").innerHTML =
-"Grand Total : " + grandTotal + " Ks";
+        // Cart တစ်ခုလုံးကို ရှင်းထုတ်မည့် လုပ်ဆောင်ချက်
+        function clearCart() {
+            if (confirm("Are you sure you want to clear the cart?")) {
+                localStorage.removeItem("cart"); // LocalStorage မှ ဖျက်ခြင်း
+                location.reload(); // Page ကို Refresh ပြန်ခေါ်ခြင်း
+            }
+        }
 
-function clearCart(){
+        // Page စတင်ပွင့်လာသည်နှင့် showBill Function ကို ချက်ချင်း run စေခြင်း
+        showBill();
+    </script>
 
-    if(confirm("Clear all items?")){
-
-        localStorage.removeItem("cart");
-
-        location.reload();
-    }
-
-}
-
-</script><br>
-<label>Name:</label>
-<input type="text" id="customerName">
-<br><br>
-<label>Phone:</label>
-<input type="text" id="phone">
-<br><br>
-<button onclick="placeOrder()">Place Order</button>
 </body>
 </html>
