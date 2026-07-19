@@ -1,47 +1,80 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Orders</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .order-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .pending { background-color: #fff3cd; }
+        .done { background-color: #d1e7dd; opacity: 0.6; }
+    </style>
+</head>
+<body>
 
-const q = query(
-  collection(db, "orders"), 
-  where("status", "==", "pending"),
-  orderBy("created_at", "asc")
-);
+    <h1>👨‍🍳 Kitchen Admin Dashboard</h1>
+    <h2>Incoming Orders (အော်ဒါအသစ်များ)</h2>
+    
+    <div id="order-list">Waiting for orders...</div>
 
-// Real-time နားထောင်ခြင်း
-onSnapshot(q, (snapshot) => {
-  const ordersListDiv = document.getElementById('orders-list');
-  ordersListDiv.innerHTML = ""; // အဟောင်းတွေကို ရှင်းထုတ်မယ်
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 
-  snapshot.forEach((docSnap) => {
-    const order = docSnap.data();
-    const orderId = docSnap.id;
+    <script>
+        // ⚠️ ဒီနေရာမှာလည်း ခုနက Firebase config ကိုပဲ ပြန်ထည့်ပေးပါ
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-    // မှာထားတဲ့ Items တွေကို စာသားပြောင်းမယ်
-    let itemsHTML = order.items.map(i => <li>${i.item_name} x ${i.quantity}</li>).join('');
+        const orderListDiv = document.getElementById('order-list');
 
-    // Order ကတ်ပြားတစ်ခုချင်းစီ ထုတ်ပေးမယ်
-    ordersListDiv.innerHTML += 
-      <div class="order-card" id="card-${orderId}">
-        <h3>စားပွဲတင်နံပါတ်: ${order.table_number}</h3>
-        <ul>${itemsHTML}</ul>
-        <p>စုစုပေါင်း金額: ${order.total_price} ကျပ်</p>
-        <button onclick="serveOrder('${orderId}')">အော်ဒါ ပို့ပြီးပြီ</button>
-      </div>
-    ;
-  });
-});
+        // database ထဲက 'orders' node ကို အမြဲတမ်း စောင့်ကြည့်နေမယ့် function (.on('value', ...))
+        // Customer ဘက်က အော်ဒါတင်လိုက်တာနဲ့ ဒီဘက်မှာ Refresh လုပ်စရာမလိုဘဲ တန်းပေါ်လာပါလိမ့်မယ်
+        database.ref('orders').on('value', (snapshot) => {
+            orderListDiv.innerHTML = ""; // အဟောင်းတွေကို ရှင်းထုတ်တာ
+            
+            const data = snapshot.val();
+            if (!data) {
+                orderListDiv.innerHTML = "<p>ယခုအချိန်တွင် အော်ဒါမရှိသေးပါ။</p>";
+                return;
+            }
 
-// အော်ဒါ ပို့ပြီးသွားရင် Status ပြောင်းမယ့် Function
-window.serveOrder = async function(id) {
-  const orderRef = doc(db, "orders", id);
-  await updateDoc(orderRef, {
-    status: "served" // status ကို served ပြောင်းလိုက်တာနဲ့ UI ထဲကနေ ကွယ်သွားပါမယ်
-  });
-}
-  
-</script>
-<div class="admin-dashboard">
-  <h2>🔔 တက်လာသော အော်ဒါအသစ်များ</h2>
-  <div id="orders-list">
-   
-  </div>
-</div>
+            // ရလာတဲ့ အော်ဒါ list ကို HTML ထုတ်ပေးတာ
+            Object.keys(data).forEach(orderId => {
+                const order = data[orderId];
+                
+                const card = document.createElement('div');
+                card.classList.add('order-card');
+                card.classList.add(order.status === 'Done' ? 'done' : 'pending');
+
+                card.innerHTML = `
+                    <h3>🍔 ${order.itemName}</h3>
+                    <p>စျေးနှုန်း - ${order.itemPrice} Ks</p>
+                    <p>အခြေအနေ - <strong>${order.status}</strong></p>
+                    ${order.status === 'Pending' ? `<button onclick="markAsDone('${orderId}')">လုပ်ဆောင်ပြီးပြီ</button>` : ''}
+                `;
+                
+                orderListDiv.appendChild(card);
+            });
+        });
+
+        // အော်ဒါလုပ်ပြီးရင် အခြေအနေ ပြောင်းပေးမယ့် function
+        function markAsDone(orderId) {
+            database.ref('orders/' + orderId).update({
+                status: "Done"
+            });
+        }
+    </script>
+</body>
+</html>
