@@ -1,0 +1,47 @@
+<script>
+
+const q = query(
+  collection(db, "orders"), 
+  where("status", "==", "pending"),
+  orderBy("created_at", "asc")
+);
+
+// Real-time နားထောင်ခြင်း
+onSnapshot(q, (snapshot) => {
+  const ordersListDiv = document.getElementById('orders-list');
+  ordersListDiv.innerHTML = ""; // အဟောင်းတွေကို ရှင်းထုတ်မယ်
+
+  snapshot.forEach((docSnap) => {
+    const order = docSnap.data();
+    const orderId = docSnap.id;
+
+    // မှာထားတဲ့ Items တွေကို စာသားပြောင်းမယ်
+    let itemsHTML = order.items.map(i => <li>${i.item_name} x ${i.quantity}</li>).join('');
+
+    // Order ကတ်ပြားတစ်ခုချင်းစီ ထုတ်ပေးမယ်
+    ordersListDiv.innerHTML += 
+      <div class="order-card" id="card-${orderId}">
+        <h3>စားပွဲတင်နံပါတ်: ${order.table_number}</h3>
+        <ul>${itemsHTML}</ul>
+        <p>စုစုပေါင်း金額: ${order.total_price} ကျပ်</p>
+        <button onclick="serveOrder('${orderId}')">အော်ဒါ ပို့ပြီးပြီ</button>
+      </div>
+    ;
+  });
+});
+
+// အော်ဒါ ပို့ပြီးသွားရင် Status ပြောင်းမယ့် Function
+window.serveOrder = async function(id) {
+  const orderRef = doc(db, "orders", id);
+  await updateDoc(orderRef, {
+    status: "served" // status ကို served ပြောင်းလိုက်တာနဲ့ UI ထဲကနေ ကွယ်သွားပါမယ်
+  });
+}
+  
+</script>
+<div class="admin-dashboard">
+  <h2>🔔 တက်လာသော အော်ဒါအသစ်များ</h2>
+  <div id="orders-list">
+   
+  </div>
+</div>
