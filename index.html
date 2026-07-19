@@ -1,69 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Menu</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Menu</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <h1 align="center">🍴 Restaurant Menu</h1>
+<h1>🍴 Restaurant Menu</h1>
 
-    <div class="menu">
-        <div class="item">
-            <h3>Fried Rice</h3>
-            <p>Price : 5000 Ks</p>
-            <button onclick="orderNow('Fried Rice', 5000)">Order Now</button>
-        </div>
-        <div class="item">
-            <h3>Chicken Burger</h3>
-            <p>Price : 4500 Ks</p>
-            <button onclick="orderNow('Chicken Burger', 4500)">Order Now</button>
-        </div>
-        <div class="item">
-            <h3>Pizza</h3>
-            <p>Price : 8000 Ks</p>
-            <button onclick="orderNow('Pizza', 8000)">Order Now</button>
-        </div>
-    </div>
+<div class="customer">
+    <label>Customer Phone Number</label><br>
+    <input type="text" id="phone" placeholder="09xxxxxxxxx">
+</div>
 
-    <!-- Firebase SDKs တွေကို ထည့်သွင်းခြင်း (v9 အဟောင်းပုံစံ Firebase compat Version နဲ့ ရေးပေးထားပါတယ်၊ HTML ထဲမှာ သုံးရလွယ်အောင်လို့ပါ) -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+<div class="menu">
 
-    <script>
-        // ⚠️ ဒီနေရာမှာ သင့် Firebase Project settings ထဲက ရလာတဲ့ config နဲ့ အစားထိုးပါ
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        
-        // Firebase ကို initialize လုပ်ခြင်း
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+<div class="item">
+    <h3>Fried Rice</h3>
+    <p>5000 Ks</p>
+    <button onclick="addToCart('Fried Rice',5000)">Add</button>
+</div>
 
-        function orderNow(name, price) {
-            // အော်ဒါအသစ်အတွက် နေရာတစ်ခု ယူလိုက်ခြင်း
-            const orderRef = database.ref('orders').push();
-            
-            // Firebase ထဲကို Data လှမ်းထည့်ခြင်း
-            orderRef.set({
-                itemName: name,
-                itemPrice: price,
-                status: "Pending", // အော်ဒါအခြေအနေ
-                timestamp: Date.now()
-            }).then(() => {
-                alert(name + " အတွက် အော်ဒါတင်ပြီးပါပြီ။");
-            }).catch((error) => {
-                console.error("Error: ", error);
-            });
-        }
-    </script>
+<div class="item">
+    <h3>Chicken Burger</h3>
+    <p>4500 Ks</p>
+    <button onclick="addToCart('Chicken Burger',4500)">Add</button>
+</div>
+
+<div class="item">
+    <h3>Pizza</h3>
+    <p>8000 Ks</p>
+    <button onclick="addToCart('Pizza',8000)">Add</button>
+</div>
+
+<div class="item">
+    <h3>Noodles</h3>
+    <p>4000 Ks</p>
+    <button onclick="addToCart('Noodles',4000)">Add</button>
+</div>
+
+<div class="item">
+    <h3>Coca Cola</h3>
+    <p>1500 Ks</p>
+    <button onclick="addToCart('Coca Cola',1500)">Add</button>
+</div>
+
+<div class="item">
+    <h3>Orange Juice</h3>
+    <p>2500 Ks</p>
+    <button onclick="addToCart('Orange Juice',2500)">Add</button>
+</div>
+
+</div>
+
+<br>
+
+<div align="center">
+    <button onclick="placeOrder()">Place Order</button>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
