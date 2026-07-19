@@ -1,0 +1,21 @@
+<!-- Firebase core App နဲ့ Firestore SDK ကို CDN ကနေ လှမ်းယူမယ် -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, where, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore.js";
+
+  // Firebase Console က ရလာတဲ့ သင့်ရဲ့ Web App Config ကို ဒီမှာ ထည့်ပါ
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Firebase ကို Initialize လုပ်မယ်
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // အောက်က Section တွေမှာ ဒီ db reference ကို သုံးသွားပါမယ်
+</script>
