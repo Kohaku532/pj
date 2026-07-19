@@ -57,9 +57,44 @@
             <button>🛒 View Bill</button>
         </a>
     </div>
-<script src="script.js"></script>
+
 <script>
 
+    let cart = [];
+// URL ကနေ table number ကို ဖတ်မယ် (ဥပမာ- menu.html?table=5)
+const urlParams = new URLSearchParams(window.location.search);
+const tableNumber = urlParams.get('table') || "Unknown";
+document.getElementById('table-no').innerText = tableNumber;
+
+// Cart ထဲကို ပစ္စည်းထည့်တဲ့ function
+window.addToCart = function(id, name, price) {
+  cart.push({ menu_id: id, item_name: name, price: price, quantity: 1 });
+  alert(${name} ကို Cart ထဲ ထည့်လိုက်ပါပြီ။);
+}
+
+// Database ထဲကို အော်ဒါ ပို့မည့် function
+window.placeOrder = async function() {
+  if (cart.length === 0) return alert("ကျေးဇူးပြု၍ မီနူးအရင်ရွေးချယ်ပါ။");
+  
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  try {
+    const docRef = await addDoc(collection(db, "orders"), {
+      table_number: tableNumber,
+      items: cart,
+      total_price: total,
+      status: "pending",
+      created_at: serverTimestamp()
+    });
+
+    alert("အော်ဒါ မှာယူမှု အောင်မြင်ပါသည်။");
+    // မှာပြီးရင် Cart ကို ရှင်းလိုက်မယ်
+    cart = []; 
+  } catch (e) {
+    console.error("Error: ", e);
+  }
+}
+    
 function addToCart(name, price){
 
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
